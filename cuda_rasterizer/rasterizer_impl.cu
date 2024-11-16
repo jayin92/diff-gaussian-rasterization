@@ -177,6 +177,7 @@ CudaRasterizer::ImageState CudaRasterizer::ImageState::fromChunk(char*& chunk, s
   return img;
 }
 
+
 CudaRasterizer::BinningState CudaRasterizer::BinningState::fromChunk(char*& chunk, size_t P)
 {
   BinningState binning;
@@ -216,6 +217,7 @@ int CudaRasterizer::Rasterizer::forward(
   const float* projmatrix,
   const float* cam_pos,
   const float tan_fovx, const float tan_fovy,
+  const float kernel_size,
   const bool prefiltered,
   float* out_color,
   float* out_depth,
@@ -263,6 +265,7 @@ int CudaRasterizer::Rasterizer::forward(
     width, height,
     focal_x, focal_y,
     tan_fovx, tan_fovy,
+    kernel_size,
     radii,
     geomState.means2D,
     geomState.depths,
@@ -364,6 +367,7 @@ void CudaRasterizer::Rasterizer::backward(
   const float* projmatrix,
   const float* campos,
   const float tan_fovx, const float tan_fovy,
+	const float kernel_size,
   const int* radii,
   char* geom_buffer,
   char* binning_buffer,
@@ -450,6 +454,7 @@ void CudaRasterizer::Rasterizer::backward(
     projmatrix,
     focal_x, focal_y,
     tan_fovx, tan_fovy,
+    kernel_size,
     (glm::vec3*)campos,
     (float3*)dL_dmean2D,
     dL_dconic,
@@ -460,5 +465,7 @@ void CudaRasterizer::Rasterizer::backward(
     (glm::vec3*)dL_dnorm3D,
     dL_dsh,
     (glm::vec3*)dL_dscale,
-    (glm::vec4*)dL_drot), debug)
+    (glm::vec4*)dL_drot,
+    geomState.conic_opacity,
+    dL_dopacity), debug)
 }

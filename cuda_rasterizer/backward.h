@@ -49,7 +49,7 @@ namespace BACKWARD
 
   void preprocess(
     int P, int D, int M,
-    const float3* means,
+    const float3* means3D,
     const int* radii,
     const float* shs,
     const bool* clamped,
@@ -59,21 +59,24 @@ namespace BACKWARD
     const float* cov3Ds,
     const glm::vec3* norm3Ds,
     bool is_norm3Ds_precomp,
-    const float* view,
-    const float* proj,
+    const float* viewmatrix,
+    const float* projmatrix,
     const float focal_x, float focal_y,
     const float tan_fovx, float tan_fovy,
+    const float kernel_size,
     const glm::vec3* campos,
     const float3* dL_dmean2D,
-    const float* dL_dconics,
-    glm::vec3* dL_dmeans,
+    const float* dL_dconic,
+    glm::vec3* dL_dmean3D,
     float* dL_dcolor,
     float* dL_ddepth,
     float* dL_dcov3D,
     glm::vec3* dL_dnorm3D,
     float* dL_dsh,
     glm::vec3* dL_dscale,
-    glm::vec4* dL_drot);
+    glm::vec4* dL_drot,
+    const float4* conic_opacity,
+    float* dL_dopacity);
 }
 
 #endif
